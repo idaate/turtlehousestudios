@@ -5,20 +5,9 @@ _team: kateri 'kiki' bajer_
 # Assignments
 
 ```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+# Assignment 1: Modded Game
+(http://localhost:63342/New%20Project%20FR/game.html?_ijt=827mmmjnln756e72iu762eqk5e)
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
 ```
 
