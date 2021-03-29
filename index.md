@@ -7,7 +7,7 @@ _team: kateri 'kiki' bajer_
 ```markdown
 
 # Assignment 1: Modded Game
-(http://localhost:63342/New%20Project%20FR/game.html?_ijt=827mmmjnln756e72iu762eqk5e)
+[http://localhost:63342/New%20Project%20FR/game.html?_ijt=827mmmjnln756e72iu762eqk5e]
 
 ```
 
