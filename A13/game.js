@@ -29,46 +29,67 @@ var GRID_WIDTH = 8;
 
 var CIG_NUMBER = 0;
 
-var CIG_START = 5;
-var CIG_MID = 6;
-var CIG_END = 7;
+var CIG_START = 4;
+var a = CIG_START + 1;
+var b = CIG_START + 2;
+var c = CIG_START + 3;
 
-var rate = 60;
+var rate = 40;
 
 var currentCigHeight;
 
 var createCig = function ( y ) {
 
 	// resets the faders of where the old cigarettes used to be
-	PS.fade( 7, y, 0, { rgb : PS.COLOR_BLACK } );
-	PS.fade( 6, y, 0 );
-	PS.fade( 5, y, 0 );
+	PS.fade( c, y, 0, { rgb : PS.COLOR_BLACK } );
+	PS.fade( b, y, 0, { rgb : PS.COLOR_BLACK } );
+	PS.fade( a, y, 0, { rgb : PS.COLOR_BLACK } );
+	PS.fade( CIG_START, y, 0, { rgb : PS.COLOR_BLACK } );
 
 	currentCigHeight = Math.floor(Math.random() * 7);
+	CIG_START = Math.floor(Math.random() * 4);
 
 	while ( currentCigHeight === y ){
 		currentCigHeight = Math.floor(Math.random() * 7);
 	}
 
-	PS.color(7, currentCigHeight, PS.COLOR_ORANGE);
-	PS.color(6, currentCigHeight, PS.COLOR_WHITE);
-	PS.color(5, currentCigHeight, PS.COLOR_WHITE);
+	while ( CIG_START === b ){
+		CIG_START = Math.floor(Math.random() * 4);
+	}
+
+	a = CIG_START + 1;
+	b = CIG_START + 2;
+	c = CIG_START + 3;
+
+	PS.color(c, currentCigHeight, PS.COLOR_ORANGE);
+	PS.color(b, currentCigHeight, PS.COLOR_WHITE);
+	PS.color(a, currentCigHeight, PS.COLOR_WHITE);
+	PS.color(CIG_START, currentCigHeight, PS.COLOR_WHITE);
 
 }
 
 var burn = function ( x, y ){
 
+	currentCigHeight = 99;
+
 	PS.audioLoad("fx_swoosh");
 
+	// SOMETHING WRONG WITH THIS MAYBE???
+	var end3 = function() {
+		PS.fade( (x + 3), y, rate, { rgb : PS.COLOR_RED, onEnd : createCig(y) } );
+		PS.color( (x + 3), y, PS.COLOR_BLACK);
+		PS.audioPlay("fx_swoosh");
+	}
+
 	var end2 = function() {
-		PS.fade( 7, y, rate, { rgb : PS.COLOR_RED, onEnd : createCig(y) } );
-		PS.color( 7, y, PS.COLOR_BLACK);
+		PS.fade( (x + 2), y, rate, { rgb : PS.COLOR_RED, onEnd : end3 } );
+		PS.color( (x + 2), y, PS.COLOR_BLACK);
 		PS.audioPlay("fx_swoosh");
 	}
 
 	var end1 = function (){
-		PS.fade( 6, y, rate, { rgb : PS.COLOR_RED, onEnd : end2 } );
-		PS.color( 6, y, PS.COLOR_BLACK);
+		PS.fade( (x + 1), y, rate, { rgb : PS.COLOR_RED, onEnd : end2 } );
+		PS.color( (x + 1), y, PS.COLOR_BLACK);
 		PS.audioPlay("fx_swoosh");
 	}
 
@@ -90,6 +111,7 @@ PS.init = function( system, options ) {
 
 	// PS.bgColor(PS.COLOR_BLACK);
 	PS.gridSize( GRID_WIDTH, GRID_HEIGHT );
+	PS.borderColor(PS.ALL, PS.ALL, PS.COLOR_RED);
 	PS.border(PS.ALL, PS.ALL, 0);
 	PS.color(PS.ALL, PS.ALL, PS.COLOR_BLACK);
 	PS.gridColor(PS.COLOR_BLACK);
@@ -173,6 +195,8 @@ This function doesn't have to do anything. Any value returned is ignored.
 PS.enter = function( x, y, data, options ) {
 	// Uncomment the following code line to inspect x/y parameters:
 
+	PS.border(x, y, 3);
+
 	// PS.debug( "PS.enter() @ " + x + ", " + y + "\n" );
 
 	// Add code here for when the mouse cursor/touch enters a bead.
@@ -190,6 +214,8 @@ This function doesn't have to do anything. Any value returned is ignored.
 
 PS.exit = function( x, y, data, options ) {
 	// Uncomment the following code line to inspect x/y parameters:
+
+	PS.border(x, y, 0);
 
 	// PS.debug( "PS.exit() @ " + x + ", " + y + "\n" );
 
