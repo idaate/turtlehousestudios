@@ -24,8 +24,9 @@ Any value returned is ignored.
 
 // GLOBAL VARIABLES
 
-var GRID_HEIGHT = 10;
+var GRID_HEIGHT = 12;
 var GRID_WIDTH = 8;
+var GRID_TOP = 0;
 
 var CIG_NUMBER = 0;
 
@@ -38,6 +39,8 @@ var rate = 40;
 
 var currentCigHeight;
 
+var smokeBits = [];
+
 var createCig = function ( y ) {
 
 	// resets the faders of where the old cigarettes used to be
@@ -46,11 +49,11 @@ var createCig = function ( y ) {
 	PS.fade( a, y, 0, { rgb : PS.COLOR_BLACK } );
 	PS.fade( CIG_START, y, 0, { rgb : PS.COLOR_BLACK } );
 
-	currentCigHeight = Math.floor(Math.random() * 7);
+	currentCigHeight = Math.floor(Math.random() * 11);
 	CIG_START = Math.floor(Math.random() * 4);
 
-	while ( currentCigHeight === y ){
-		currentCigHeight = Math.floor(Math.random() * 7);
+	while ( currentCigHeight === y || currentCigHeight === (y - 1) || currentCigHeight === (y - 2) || currentCigHeight === (y-3)){
+		currentCigHeight = Math.floor(Math.random() * 11);
 	}
 
 	while ( CIG_START === b ){
@@ -68,6 +71,31 @@ var createCig = function ( y ) {
 
 }
 
+var smoke = function (x, y){
+
+	var r = y-1;
+	var t = y-2;
+
+	var smoke3 = function(){
+		if (t >= 0){
+			PS.fade(x, (y-2), 30, { rgb : PS.COLOR_GRAY });
+			PS.color(x, (y-2), PS.COLOR_BLACK);
+		}
+	}
+
+	var smoke2 = function(){
+		if (r >= 0) {
+			PS.fade(x, (y - 1), 30, { rgb : PS.COLOR_GRAY, onEnd : smoke3});
+			PS.color(x, (y - 1), PS.COLOR_BLACK);
+		}
+	}
+
+
+	PS.fade(x, y, 30, { rgb : PS.COLOR_GRAY, onEnd : smoke2});
+	PS.color(x, y, PS.COLOR_BLACK);
+
+}
+
 var burn = function ( x, y ){
 
 	currentCigHeight = 99;
@@ -76,23 +104,32 @@ var burn = function ( x, y ){
 
 	// SOMETHING WRONG WITH THIS MAYBE???
 	var end3 = function() {
+
 		PS.fade( (x + 3), y, rate, { rgb : PS.COLOR_RED, onEnd : createCig(y) } );
 		PS.color( (x + 3), y, PS.COLOR_BLACK);
 		PS.audioPlay("fx_swoosh");
 	}
 
 	var end2 = function() {
+
 		PS.fade( (x + 2), y, rate, { rgb : PS.COLOR_RED, onEnd : end3 } );
 		PS.color( (x + 2), y, PS.COLOR_BLACK);
 		PS.audioPlay("fx_swoosh");
 	}
 
 	var end1 = function (){
+
 		PS.fade( (x + 1), y, rate, { rgb : PS.COLOR_RED, onEnd : end2 } );
 		PS.color( (x + 1), y, PS.COLOR_BLACK);
 		PS.audioPlay("fx_swoosh");
 	}
 
+
+	var a = y - 1;
+
+	if (a >= 0){
+		smoke(x, a);
+	}
 	PS.fade( x, y, rate, { rgb : PS.COLOR_RED, onEnd : end1 } );
 	PS.color( x, y, PS.COLOR_BLACK );
 	PS.audioPlay("fx_swoosh");
@@ -118,14 +155,6 @@ PS.init = function( system, options ) {
 
 	currentCigHeight = Math.floor(Math.random() * 7);
 	createCig(currentCigHeight);
-
-	// Install additional initialization code
-	// here as needed
-
-	// PS.dbLogin() must be called at the END
-	// of the PS.init() event handler (as shown)
-	// DO NOT MODIFY THIS FUNCTION CALL
-	// except as instructed
 
 	PS.dbLogin( "imgd2900", TEAM, function ( id, user ) {
 		if ( user === PS.ERROR ) {
