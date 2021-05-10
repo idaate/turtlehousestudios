@@ -1340,7 +1340,7 @@ var drawMap = function( map ){
 			data = map.data[ i ];
 			switch ( data ){
 				case MAP_GROUND:
-					color = 0xC1C1C1;
+					color = 0xC1C1C1; //h 
 					break;
 				case MAP_WALL:
 					color = WALL_COLOR;
