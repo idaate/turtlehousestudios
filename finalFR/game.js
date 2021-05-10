@@ -1340,7 +1340,7 @@ var drawMap = function( map ){
 			data = map.data[ i ];
 			switch ( data ){
 				case MAP_GROUND:
-					color = 0xDDDDDD;
+					color = 0xC1C1C1;
 					break;
 				case MAP_WALL:
 					color = WALL_COLOR;
@@ -1932,7 +1932,7 @@ var sigilTest = function(){
 					}
 					else{
 						drawMap(STAGE_9_2);
-						PS.statusText("then not having a purpose.");
+						PS.statusText("than not having a purpose.");
 					}
 				}
 				else {
@@ -1978,47 +1978,66 @@ PS.keyDown = function( key, shift, ctrl, options ) {
 
 	if ( key === PS.KEY_ARROW_UP || key === 119 ){
 
-		if ( movedYet === false ){
-			movedYet = true;
-			CURRENT_DIALOGUE = 2;
-			textDisplay();
-		}
+		if ( isIntro ){
 
-		if (uy > 0 ){
-			if (!isWall(currentLocation.x, uy)){
-				moveUp();
+		}
+		else {
+			if ( movedYet === false ){
+				movedYet = true;
+				CURRENT_DIALOGUE = 2;
+				textDisplay();
+			}
+
+			if (uy > 0 ){
+				if (!isWall(currentLocation.x, uy)){
+					moveUp();
+				}
 			}
 		}
+
 	}
 
 	if ( key === PS.KEY_ARROW_DOWN || key === 115 ) {
 
-		if ( movedYet === false ){
-			movedYet = true;
-			CURRENT_DIALOGUE = 2;
-			textDisplay();
-		}
+		if ( isIntro ){
 
-		if (dy < ( GRID_HEIGHT - 1 ) ){
-			if (!isWall(currentLocation.x, dy)){
-				moveDown();
+		}
+		else {
+			if ( movedYet === false ){
+				movedYet = true;
+				CURRENT_DIALOGUE = 2;
+				textDisplay();
+			}
+
+			if (dy < ( GRID_HEIGHT - 1 ) ){
+				if (!isWall(currentLocation.x, dy)){
+					moveDown();
+				}
 			}
 		}
+
 	}
 
 	if ( key === PS.KEY_ARROW_LEFT || key === 97 ) {
 
-		if ( movedYet === false ){
-			movedYet = true;
-			CURRENT_DIALOGUE = 2;
-			textDisplay();
-		}
+		if ( isIntro ){
 
-		if (lx > 0 ){
-			if (!isWall(lx, currentLocation.y)){
-				moveLeft();
+		}
+		else{
+			if ( movedYet === false ){
+				movedYet = true;
+				CURRENT_DIALOGUE = 2;
+				textDisplay();
+			}
+
+			if (lx > 0 ){
+				if (!isWall(lx, currentLocation.y)){
+					moveLeft();
+				}
 			}
 		}
+
+
 	}
 
 	if ( key === PS.KEY_ARROW_RIGHT || key === 100 ) {
@@ -2046,7 +2065,11 @@ PS.keyDown = function( key, shift, ctrl, options ) {
 
 	if ( key === PS.KEY_SPACE ){
 
-		sigilTest();
+		if ( isIntro ){
+
+		}
+		else
+			sigilTest();
 
 	}
 
